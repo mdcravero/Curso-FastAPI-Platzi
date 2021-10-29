@@ -22,6 +22,12 @@ class Person(BaseModel):
     is_married: Optional[bool] = None
 
 
+class Location (BaseModel):
+    city: str
+    state: str
+    country: str
+
+
 @app.get("/")  # Path operation decorator
 def home():  # Path operaton function
     return {"Hello": "World"}
@@ -67,3 +73,23 @@ def show_person(
     )  # Con gt validamos que sea mayor a 0
 ):
     return {person_id: "It exists!"}
+
+# Validations Request Body
+
+
+@app.put("/person/{person_id}")
+def update_person(
+    person_id: int = Path(
+        ...,
+        title="Person Id",
+        description="This is the person Id",
+        gt=0
+    ),
+    person: Person = Body(...),
+    location: Location = Body(...)
+):
+    result = person.dict()
+    # Convierto a diccionario y uno los person y location
+    result.update(location.dict())
+
+    return result
