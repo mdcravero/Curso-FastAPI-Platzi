@@ -1,13 +1,12 @@
 # Python
 from typing import Optional
-import fastapi
 
 # Pydantic
 from pydantic import BaseModel
 
 # FastAPI
 from fastapi import FastAPI
-from fastapi import Body
+from fastapi import Body, Query
 
 app = FastAPI()
 
@@ -34,3 +33,13 @@ def home():  # Path operaton function
 # Los 3 puntos indican que es obligatorio (required)
 def create_person(person: Person = Body(...)):
     return person
+
+# Validations: Query Parameters
+
+
+@app.get("/person/detail")
+def show_person(
+    name: Optional[str] = Query(None, min_length=1, max_length=50),
+    age: Optional[str] = Query(...)
+):
+    return{name: age}
